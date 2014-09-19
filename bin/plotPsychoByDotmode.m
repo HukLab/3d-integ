@@ -9,7 +9,7 @@ sz = 100;
 lw1 = 2;
 lw2 = 3;
 lw3 = 3;
-cmap = {[0 0.8 0], [0.9 0 0]};
+cmap = colorSchemes('both');
 dotmodes = {'2d', '3d'};
 
 %%

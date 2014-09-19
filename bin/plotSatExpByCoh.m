@@ -23,7 +23,6 @@ for i = 1:length(dotmodes)
     end
 
     fig = figure(i); clf; hold on;
-    tempint_pltfmts;
     title([dotmode ': percent correct vs. duration (ms)']);
     xlabel('duration (ms)');
     ylabel('% correct');
@@ -32,18 +31,7 @@ for i = 1:length(dotmodes)
     set(gca,'XScale','log');
     
     cohs = unique(data.params.coh);
-    colorOrder = summer(length(cohs) + 1);
-    if i == 1
-        tmp1 = colorOrder(:,1);
-        tmp2 = colorOrder(:,2);
-        colorOrder(:,1) = 0.8*tmp1;
-        colorOrder(:,2) = 0.8*tmp2;
-        colorOrder(:,3) = 0.8*tmp1;
-    elseif i == 2
-        colorOrder(:,1) = 0.9;
-        colorOrder(:,2) = colorOrder(:,2)*2 - 1;
-        colorOrder(:,3) = colorOrder(:,2);
-    end
+    colorOrder = colorSchemes(dotmode, 'coh', numel(cohs));
     for ci = 1:length(cohs)
         coh = cohs(ci);
         isCoh1 = data.pts.coh == coh;
@@ -66,7 +54,7 @@ for i = 1:length(dotmodes)
         xf = linspace(min(xb), max(xb));
         yf = A - (A - B)*exp(-(xf - x_delay)./T);
         
-        color = colorOrder(length(cohs)-ci+1, :);
+        color = colorOrder(ci, :);
         lbl = num2str(sprintf('%.2f', coh));
 %         plot([T+x_delay, T+x_delay], [0.4, 1.0], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
         plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', num2str(lbl));

@@ -12,6 +12,7 @@ set(gca, 'TickDir', 'out');
 set(gca, 'TickLength', [.02 .02]);
 set(gca, 'XMinorTick', 'off');
 set(gca, 'YMinorTick', 'off');
+set(gca, 'ZMinorTick', 'off');
 
 set(findall(gcf, 'Type', 'text'), 'FontName', FontName);
 set(findall(gcf, 'Type', 'text'), 'FontSize', FontSize);

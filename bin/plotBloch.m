@@ -11,7 +11,7 @@ sz = 100;
 lw1 = 2;
 lw2 = 3;
 lw3 = 3;
-cmap = {[0 0.8 0], [0.9 0 0]};
+cmap = colorSchemes('both');
 dotmodes = {'2d', '3d'};
 
 %%
@@ -47,17 +47,7 @@ for i = 1:length(dotmodes)
         continue
     end
     maxdi = round(1.2*max(data.pts.di));
-    colorOrder = summer(maxdi);
-    colorOrder = colorOrder(end:-1:1,:);
-    if i == 1
-        colorOrder(:,1) = colorOrder(:,2)*2 - 1;
-        colorOrder(:,2) = 0.8;
-        colorOrder(:,3) = 0.0;
-    elseif i == 2
-        colorOrder(:,1) = 0.9;
-        colorOrder(:,2) = colorOrder(:,2)*2 - 1;
-        colorOrder(:,3) = 0.0;
-    end
+    colorOrder = colorSchemes(dotmode, 'dur', max(data.pts.di));
     
     xs = data.pts.dur(i1);
     ys = data.pts.sens(i1);
@@ -88,7 +78,7 @@ for i = 1:length(dotmodes)
     h = errorbar(xs, ys, errs(:,1), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
     pts = [xs ys];
     for j = 1:numel(xs)
-        color = colorOrder(maxdi-numel(xs)+j,:);
+        color = colorOrder(j,:);
         scatter(xs(j), ys(j), sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
     end
 %     scatter(xs, ys, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');

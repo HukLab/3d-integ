@@ -41,16 +41,7 @@ for i = 1:length(dotmodes)
     maxdi = max(data.params.di);
     dis = 1:maxdi; %4:5:maxdi;
     dis = [5 10 15 20];
-    colorOrder = summer(maxdi + 2);
-    if i == 1
-        colorOrder(:,1) = colorOrder(:,2)*2 - 1;
-        colorOrder(:,2) = 0.8;
-        colorOrder(:,3) = 0.0;
-    elseif i == 2
-        colorOrder(:,1) = 0.9;
-        colorOrder(:,2) = colorOrder(:,2)*2 - 1;
-        colorOrder(:,3) = 0.0;
-    end
+    colorOrder = colorSchemes(dotmode, 'dur', max(data.params.di));
     for jj = 1:numel(dis)
         dii = dis(jj);
         xb = f1.x(f1.di == dii);
@@ -83,7 +74,7 @@ for i = 1:length(dotmodes)
         
         yf = 0.5 + (1 - 0.5 - lapse)*cdf('logistic', xf, loc, scale);
         
-        color = colorOrder(maxdi-dii+1, :);
+        color = colorOrder(dii, :);
         dur = f2.dur(f2.di == dii);
         lbl = num2str(sprintf('%.0f', dur(1)));
 %         plot([thresh, thresh], [0.4, 0.75], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
