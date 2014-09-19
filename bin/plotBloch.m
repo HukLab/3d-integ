@@ -1,0 +1,130 @@
+%%
+basename = 'pcorVsCohByDur_elbow';
+data = loadFiles(basename, subj);
+tmp = loadFiles('pcorVsCohByDur_thresh', subj);
+data.pts = tmp.params;
+outfile = fullfile('..', 'plots', [basename '-' subj '.' fig_ext]);
+
+%%
+
+sz = 100;
+lw1 = 2;
+lw2 = 3;
+lw3 = 3;
+cmap = {[0 0.8 0], [0.9 0 0]};
+dotmodes = {'2d', '3d'};
+
+%%
+
+fig = figure(1); clf; hold on;
+set(gca, 'XScale', 'log');
+set(gca, 'YScale', 'log');
+title('motion threshold vs. duration (ms)');
+xlabel('duration (ms)');
+ylabel('motion sensitivity');
+yl = [max(min(data.pts.sens), 1e-1) max(data.pts.sens)];
+
+% threshold lines
+is2d = strcmp(data.params.dotmode, '2d');
+is3d = strcmp(data.params.dotmode, '3d');
+x02d = median(data.params.x0(is2d));
+x12d = median(data.params.x1(is2d));
+x03d = median(data.params.x0(is3d));
+x13d = median(data.params.x1(is3d));
+i = 1;
+plot(exp([x02d, x02d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
+plot(exp([x12d, x12d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
+i = 2;
+plot(exp([x03d, x03d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
+plot(exp([x13d, x13d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
+
+xthresh = [];
+for i = 1:length(dotmodes)
+    dotmode = dotmodes{i};
+    i1 = strcmp(data.pts.dotmode, dotmode);
+    i2 = strcmp(data.params.dotmode, dotmode);
+    if sum(i1) == 0 || sum(i2) == 0
+        continue
+    end
+    maxdi = round(1.2*max(data.pts.di));
+    colorOrder = summer(maxdi);
+    colorOrder = colorOrder(end:-1:1,:);
+    if i == 1
+        colorOrder(:,1) = colorOrder(:,2)*2 - 1;
+        colorOrder(:,2) = 0.8;
+        colorOrder(:,3) = 0.0;
+    elseif i == 2
+        colorOrder(:,1) = 0.9;
+        colorOrder(:,2) = colorOrder(:,2)*2 - 1;
+        colorOrder(:,3) = 0.0;
+    end
+    
+    xs = data.pts.dur(i1);
+    ys = data.pts.sens(i1);
+    [ys, errs] = grpstats(ys, xs, {'mean', 'std'});
+    xs = unique(xs);
+
+    m0 = median(data.params.m0(i2));
+    m1 = median(data.params.m1(i2));
+    m2 = median(data.params.m2(i2));
+    b0 = median(data.params.b0(i2));
+    b1 = median(data.params.b1(i2));
+    b2 = median(data.params.b2(i2));
+    x0 = median(data.params.x0(i2));
+    x1 = median(data.params.x1(i2));
+    
+    xs0 = linspace(min(xs), exp(x0));
+    xs1 = linspace(exp(x0), exp(x1));
+    xs2 = linspace(exp(x1), max(xs));
+    yf0 = xs0.^m0*exp(b0);
+    yf1 = xs1.^m1*exp(b1);
+    yf2 = xs2.^m2*exp(b2);
+    
+    lbl = dotmode;
+    plot(xs0, yf0, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lbl);
+    plot(xs1, yf1, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'HandleVisibility', 'off');
+    plot(xs2, yf2, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'HandleVisibility', 'off');
+    
+    h = errorbar(xs, ys, errs(:,1), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    pts = [xs ys];
+    for j = 1:numel(xs)
+        color = colorOrder(maxdi-numel(xs)+j,:);
+        scatter(xs(j), ys(j), sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    end
+%     scatter(xs, ys, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    
+    xthresh = [xthresh exp(x0) exp(x1)];
+%     text(exp(x0), 50 + 20*(i-1), ['\leftarrow  ' sprintf('%.0f', exp(x0)) ' msec'], 'FontSize', 14, 'FontWeight', 'bold');
+%     text(exp(x1), 50 + 20*(i-1), ['\leftarrow  ' sprintf('%.0f', exp(x1)) ' msec'], 'FontSize', 14, 'FontWeight', 'bold');
+    
+    text(40, 12 + 6*strcmp(dotmode, '2d'), ['m1=' sprintf('%.2f', m0)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
+    text(400, 2 + 1*strcmp(dotmode, '2d'), ['m2=' sprintf('%.2f', m1)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
+%     text(mean(xs2), 0.8*mean(yf2), sprintf('%.2f', m2), 'FontSize', 14, 'FontWeight', 'bold');
+    
+    errorbar_tick(h, 1e-2); % problem with log
+end
+
+xlim([20, 6000]);
+ylim([0.5, 100]);
+
+xticks = [10, 100, 200, 1000];
+xtf = @(x) sprintf('%.0f', x);
+xticklbls = arrayfun(xtf, xticks, 'UniformOutput', false);
+
+yticks = [1, 10, 100];
+ytf = @(x) sprintf('%.0f', x);
+yticklbls = arrayfun(ytf, yticks, 'UniformOutput', false);
+
+% xticks = sort([xthresh [10, 100, 1000]]);
+% xticks = uncrowdTicks(xthresh, 1, true);
+% set(gca, 'XTick', xticks);
+% set(gca, 'XTickLabel', xticklbls);
+
+set(gca, 'XTick', xticks);
+set(gca, 'XTickLabel', xticklbls);
+set(gca, 'YTick', yticks);
+set(gca, 'YTickLabel', yticklbls);
+
+legend('Location', 'NorthWest');
+plotFormats;
+print(fig, ['-d' fig_ext], outfile);
