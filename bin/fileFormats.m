@@ -14,7 +14,7 @@ function [fmt1, fmt2] = fileFormats(basename)
         fmt2 = '';
     elseif strcmp('pcorVsDurByCoh', basename)
         fmt1 = '%f%f%f%f%s%s';
-        fmt2 = '%f%f%f%s%s%s';
+        fmt2 = '%f%s%f%f%f%s%s';
     elseif strcmp('fitCurveVsDurByCoh', basename)
         fmt1 = '%f%f%f%f%f%f%s%s';
         fmt2 = '%f%f%f%s%f%f%f%f%s';

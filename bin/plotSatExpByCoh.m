@@ -30,6 +30,10 @@ for i = 1:length(dotmodes)
     ylim([0.45, 1.0]);
     set(gca,'XScale','log');
     
+    crvs = [];
+    dots = [];
+    ebrs = [];
+    
     cohs = unique(data.params.coh);
     colorOrder = colorSchemes(dotmode, 'coh', numel(cohs));
     for ci = 1:length(cohs)
@@ -57,11 +61,20 @@ for i = 1:length(dotmodes)
         color = colorOrder(ci, :);
         lbl = num2str(sprintf('%.2f', coh));
 %         plot([T+x_delay, T+x_delay], [0.4, 1.0], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
-        plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', num2str(lbl));
-        h = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
-        scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
-        errorbar_tick(h, 1e-2); % problem with log
+        crv = plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', num2str(lbl));
+        ebr = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+        dts = scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
+        errorbar_tick(ebr, 1e-2); % problem with log
+        
+        crvs = [crvs; crv];
+        dots = [dots; dts];
+        ebrs = [ebrs; ebr];
     end
+    
+    uistack(dots, 'bottom');
+    uistack(ebrs, 'bottom');
+    uistack(crvs, 'bottom');
+    
     set(gca, 'XTick', [10, 100, 1000]);
     set(gca, 'XTickLabel', {'10', '100', '1000'});
     set(gca, 'YTick', [0.5, 0.75, 1.0]);

@@ -42,12 +42,15 @@ for i = 1:length(dotmodes)
     dis = 1:maxdi; %4:5:maxdi;
     dis = [5 10 15 20];
     colorOrder = colorSchemes(dotmode, 'dur', max(data.params.di));
+    
+    ebrs = [];
+    dots = [];
+    crvs = [];
     for jj = 1:numel(dis)
         dii = dis(jj);
         xb = f1.x(f1.di == dii);
         yb = f1.y(f1.di == dii);
         ns = f1.ntrials(f1.di == dii);
-%         errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
         xf = linspace(min(xb), max(xb));
         
         scales = f2.scale(f2.di == dii);
@@ -58,8 +61,7 @@ for i = 1:length(dotmodes)
 %         figure(4); subplot(numel(dis), 1, jj); hist(locs, linspace(0, 1)); xlim([0 0.8]);
 %         figure(5); subplot(numel(dis), 1, jj); hist(scales, linspace(0, 1)); xlim([0 1.0]);
 %         figure(6); subplot(numel(dis), 1, jj); hist(threshes, linspace(0, 1)); xlim([0 1.0]);
-        
-        figure(i);
+%         figure(i);
         
         % take first entry as mean (others are bootstrap)
         scale = scales(1);
@@ -79,11 +81,24 @@ for i = 1:length(dotmodes)
         lbl = num2str(sprintf('%.0f', dur(1)));
 %         plot([thresh, thresh], [0.4, 0.75], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
 %         text(thresh, 0.48, [sprintf('%.0f%%', thresh*100)], 'FontSize', 14, 'FontWeight', 'bold');
-        plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', [num2str(lbl) ' msec']);
-%         errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+        crv = plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', [num2str(lbl) ' msec']);
+        
+        err = sqrt((yb.*(1-yb))./ns);
+        errs = [err err];
+%         errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
+        ebr = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+
 %         k = waitforbuttonpress
-        scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
+        dts = scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
+        
+        ebrs = [ebrs; ebr];
+        crvs = [crvs; crv];
+        dots = [dots; dts];
     end
+    uistack(dots, 'bottom');
+    uistack(ebrs, 'bottom');
+    uistack(crvs, 'bottom');
+    
     set(gca, 'XTick', [1e-2, 1e-1, 0.5]);
     set(gca, 'XTickLabel', {'1', '10', '50'});
     set(gca, 'YTick', [0.5, 0.75, 1.0]);

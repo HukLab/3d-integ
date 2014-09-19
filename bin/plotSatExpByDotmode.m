@@ -6,9 +6,9 @@ outfile = fullfile('..', 'plots', [basename '-' subj '.' fig_ext]);
 %%
 
 sz = 100;
-lw1 = 2.0;
-lw2 = 3.0;
-lw3 = 3.0;
+lw1 = 2;
+lw2 = 3;
+lw3 = 3;
 x_delay = 0; % (ms)
 cmap = colorSchemes('both');
 dotmodes = {'2d', '3d'};
@@ -20,6 +20,11 @@ set(gca, 'XScale', 'log');
 title('Percent correct vs. duration (ms)');
 xlabel('duration (ms)');
 ylabel('% correct');
+
+vrts = [];
+dots = [];
+crvs = [];
+ebrs = [];
 
 Ts = zeros(length(dotmodes), 1);
 for i = 1:length(dotmodes)
@@ -33,26 +38,44 @@ for i = 1:length(dotmodes)
     is_fit = strcmp(data.pts.is_bin_or_fit, 'fit');
     xb = data.pts.xs(is_bin & i1);
     yb = data.pts.ys(is_bin & i1);
+    ns = data.pts.ntrials(is_bin & i1);
     xf = data.pts.xs(is_fit & i1);
     yf = data.pts.ys(is_fit & i1);
     
     T = data.params.T(i2);
     Ts(i) = T;
     
+    err = sqrt((yb.*(1-yb))./ns);
+    errs = [err err];
+%     errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
+    ebr = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    
     lbl = dotmode;
-    plot([T, T], [0.4, 1.0], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
-    plot(xf, yf, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lbl);
-    scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    vrt = plot([T, T], [0.4, 1.0], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
+    crv = plot(xf, yf, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lbl);
+    dts = scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+
+    ebrs = [ebrs; ebr];
+    dots = [dots; dts];
+    vrts = [vrts; vrt];
+    crvs = [crvs; crv];
 end
-for ii = 1:numel(Ts)
-    T = Ts(ii);
-    text(T, 0.55 - (ii-1)*0.05, ['\rightarrow ' sprintf('%.0f', T) ' msec' ], 'FontSize', 14, 'FontWeight', 'bold');
-end
+% for ii = 1:numel(Ts)
+%     T = Ts(ii);
+%     text(T, 0.55 - (ii-1)*0.05, ['\rightarrow ' sprintf('%.0f', T) ' msec' ], 'FontSize', 14, 'FontWeight', 'bold');
+% end
+
+uistack(dots, 'bottom');
+uistack(ebrs, 'bottom');
+uistack(crvs, 'bottom');
+uistack(vrts, 'bottom');
 
 set(gca, 'XTick', [10, 100, 1000]);
 set(gca, 'XTickLabel', {'10', '100', '1000'});
 set(gca, 'YTick', [0.5, 0.75, 1.0]);
 set(gca, 'YTickLabel', {'50', '75', '100'});
 legend('Location', 'NorthWest');
+xlim([min(data.pts.xs), max(data.pts.xs)]);
+ylim([0.5 1.0]);
 plotFormats;
 print(fig, ['-d' fig_ext], outfile);

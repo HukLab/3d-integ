@@ -23,14 +23,29 @@ xs = vals(is2d);
 ys = vals(is3d);
 cohs = data.params.coh(is2d);
 
+% [ys, errsY] = grpstats(ys, cohs, {'mean', 'std'});
+% [xs, errsX] = grpstats(xs, cohs, {'mean', 'std'});
+% cohs = unique(cohs);
+% pts = [xs ys cohs errsX errsY];
+
 pts = [xs ys cohs];
 pts = sortrows(pts, 3);
+
 colors = gray(numel(cohs));
+cohsSeen = [];
 for i = 1:numel(cohs)
     col = colors(numel(cohs)-i+1,:);
     coh = pts(i,3);
     lbl = sprintf('%.0f%%', coh*100);
-    scatter(pts(i,1), pts(i,2), sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', col, 'LineWidth', lw1, 'DisplayName', lbl);
+    if ~any(cohsSeen == coh)
+        cohsSeen = [cohsSeen; coh];
+        vis = 'on';
+    else
+        vis = 'off';
+    end
+    scatter(pts(i,1), pts(i,2), sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', col, 'LineWidth', lw1, 'DisplayName', lbl, 'HandleVisibility', vis);
+%     h = errorbar(pts(i,1), pts(i,2), pts(i,5), pts(i,5), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+%     herrorbar(pts(i,1), pts(i,2), pts(i,4), pts(i,4));%, 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
 end
 legend('Location', 'NorthWest');
 if strcmp(param, 'A')

@@ -87,8 +87,8 @@ for i = 1:length(dotmodes)
 %     text(exp(x0), 50 + 20*(i-1), ['\leftarrow  ' sprintf('%.0f', exp(x0)) ' msec'], 'FontSize', 14, 'FontWeight', 'bold');
 %     text(exp(x1), 50 + 20*(i-1), ['\leftarrow  ' sprintf('%.0f', exp(x1)) ' msec'], 'FontSize', 14, 'FontWeight', 'bold');
     
-    text(40, 12 + 6*strcmp(dotmode, '2d'), ['m1=' sprintf('%.2f', m0)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
-    text(400, 2 + 1*strcmp(dotmode, '2d'), ['m2=' sprintf('%.2f', m1)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
+    text(35, 12 + 6*strcmp(dotmode, '2d'), ['m1=' sprintf('%.2f', m0)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
+    text(350, 2 + 1*strcmp(dotmode, '2d'), ['m2=' sprintf('%.2f', m1)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
 %     text(mean(xs2), 0.8*mean(yf2), sprintf('%.2f', m2), 'FontSize', 14, 'FontWeight', 'bold');
     
     errorbar_tick(h, 1e-2); % problem with log

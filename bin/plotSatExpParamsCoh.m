@@ -43,7 +43,8 @@ for i = 1:length(dotmodes)
         coh = cohs(ci);
         v = v_all(cohs_all == coh);
         v0 = mean(v);        
-        h = errorbar(coh, v0, std(v), std(v), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+        er = std(v)/sqrt(numel(v));
+        h = errorbar(coh, v0, er, er, 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
         if ci == 1
             vis = 'on';
         else

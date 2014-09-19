@@ -30,8 +30,7 @@ for i = 1:length(dotmodes)
     end
     xb = data.pts.x(i1);
     yb = data.pts.y(i1);
-    ns = data.pts.ntrials(i1);
-%     errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
+    ns = data.pts.ntrials(i1);   
     xf = linspace(min(xb), max(xb));
 
     scales = data.params.scale(i2);
@@ -49,7 +48,12 @@ for i = 1:length(dotmodes)
     
     lbl = dotmode;
     plot(xf, yf, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lbl);
-%     errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+
+    err = sqrt((yb.*(1-yb))./ns);
+    errs = [err err];
+%     errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
+    errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    
     scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');
     plot([thresh, thresh], [0.5, 0.75], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
     
