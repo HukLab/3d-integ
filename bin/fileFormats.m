@@ -12,6 +12,9 @@ function [fmt1, fmt2] = fileFormats(basename)
     elseif strcmp('pcorVsCohByDur_elbow', basename)
         fmt1 = '%f%f%f%f%f%s%f%f%f%f%f%s';
         fmt2 = '';
+    elseif strcmp('pcorVsCohByDur_1elbow', basename)
+        fmt1 = '%f%f%f%f%s%f%f%f%s';
+        fmt2 = '';
     elseif strcmp('pcorVsDurByCoh', basename)
         fmt1 = '%f%f%f%f%s%s';
         fmt2 = '%f%s%f%f%f%s%s';

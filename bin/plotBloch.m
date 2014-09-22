@@ -92,6 +92,8 @@ for i = 1:length(dotmodes)
 %     text(mean(xs2), 0.8*mean(yf2), sprintf('%.2f', m2), 'FontSize', 14, 'FontWeight', 'bold');
     
     errorbar_tick(h, 1e-2); % problem with log
+    exp(x0)
+    exp(x1)
 end
 
 xlim([20, 6000]);
