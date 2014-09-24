@@ -1,5 +1,5 @@
 %%
-basename = 'fitCurveVsDurByCoh';
+basename = 'pcorVsDurByCoh';
 data = loadFiles(basename, subj);
 outfile = fullfile('..', 'plots', ['satExpParamsCoh' '-' subj '-' param '.' fig_ext]);
 

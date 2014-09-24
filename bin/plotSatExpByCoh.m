@@ -1,5 +1,5 @@
 %%
-basename = 'fitCurveVsDurByCoh';
+basename = 'pcorVsDurByCoh';
 data = loadFiles(basename, subj);
 outfile = @(dotmode) fullfile('..', 'plots', ['satExpByCoh' '-' subj '-' dotmode '.' fig_ext]);
 
@@ -9,7 +9,6 @@ sz = 100;
 lw1 = 2;
 lw2 = 3;
 lw3 = 3;
-x_delay = 30; % (ms)
 dotmodes = {'2d', '3d'};
 
 %%
@@ -40,12 +39,14 @@ for i = 1:length(dotmodes)
         coh = cohs(ci);
         isCoh1 = data.pts.coh == coh;
         isCoh2 = data.params.coh == coh;
+        is_bin = strcmp(data.pts.is_bin_or_fit, 'bin');
+        is_fit = strcmp(data.pts.is_bin_or_fit, 'fit');
         
-        xb = 1000*data.pts.dur(isCoh1 & i1);
-        yb = data.pts.pc(isCoh1 & i1);
-        ns = data.pts.ntrials(isCoh1 & i1);
-%         er = data.pts.se(isCoh1 & i1);
-%         errs = [er er];
+        xb = data.pts.xs(isCoh1 & is_bin & i1);
+        yb = data.pts.ys(isCoh1 & is_bin & i1);
+        ns = data.pts.ntrials(isCoh1 & is_bin & i1);
+        xf = data.pts.xs(isCoh1 & is_fit & i1);
+        yf = data.pts.ys(isCoh1 & is_fit & i1);
         err = sqrt((yb.*(1-yb))./ns);
         errs = [err err];
         
@@ -57,8 +58,6 @@ for i = 1:length(dotmodes)
         A = mean(A);
         B = mean(B);
         T = mean(T);
-        xf = linspace(min(xb), max(xb));
-        yf = A - (A - B)*exp(-(xf - x_delay)./T);
         
         color = colorOrder(ci, :);
         lbl = num2str(sprintf('%d%%', coh*100));

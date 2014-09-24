@@ -1,5 +1,5 @@
 %%
-basename = 'fitCurveVsDurByCoh';
+basename = 'pcorVsDurByCoh';
 data = loadFiles(basename, subj);
 outfile = fullfile('..', 'plots', ['satExpParams2d3d' '-' subj '-' param '.' fig_ext]);
 
@@ -21,21 +21,23 @@ is3d = strcmp(data.params.dotmode, '3d');
 vals = data.params.(param);
 xs = vals(is2d);
 ys = vals(is3d);
-cohs = data.params.coh(is2d);
+cohs2d = data.params.coh(is2d);
+cohs3d = data.params.coh(is3d);
+pts2d = sortrows([cohs2d xs], 1);
+pts3d = sortrows([cohs3d ys], 1);
+assert(isequal(pts2d(:,1), pts3d(:,1)));
 
 % [ys, errsY] = grpstats(ys, cohs, {'mean', 'std'});
 % [xs, errsX] = grpstats(xs, cohs, {'mean', 'std'});
 % cohs = unique(cohs);
 % pts = [xs ys cohs errsX errsY];
 
-pts = [xs ys cohs];
-pts = sortrows(pts, 3);
-
+cohs = sort(cohs2d);
 colors = gray(numel(cohs));
 cohsSeen = [];
 for i = 1:numel(cohs)
     col = colors(numel(cohs)-i+1,:);
-    coh = pts(i,3);
+    coh = cohs(i);
     lbl = sprintf('%.0f%%', coh*100);
     if ~any(cohsSeen == coh)
         cohsSeen = [cohsSeen; coh];
@@ -43,7 +45,7 @@ for i = 1:numel(cohs)
     else
         vis = 'off';
     end
-    scatter(pts(i,1), pts(i,2), sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', col, 'LineWidth', lw1, 'DisplayName', lbl, 'HandleVisibility', vis);
+    scatter(pts2d(i,2), pts3d(i,2), sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', col, 'LineWidth', lw1, 'DisplayName', lbl, 'HandleVisibility', vis);
 %     h = errorbar(pts(i,1), pts(i,2), pts(i,5), pts(i,5), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
 %     herrorbar(pts(i,1), pts(i,2), pts(i,4), pts(i,4));%, 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
 end

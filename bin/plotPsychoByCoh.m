@@ -12,7 +12,6 @@ lw3 = 3;
 dotmodes = {'2d', '3d'};
 
 %%
-
 for i = 1:length(dotmodes)
     dotmode = dotmodes{i};
     i1 = strcmp(data.pts.dotmode, dotmode);
@@ -36,7 +35,7 @@ for i = 1:length(dotmodes)
     title([dotmode ': percent correct vs. motion coherence']);
     xlabel('% coherence');
     ylabel('% correct');
-    plot([0.02, 0.7], [0.75, 0.75], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
+    ln = plot([0.02, 0.7], [0.75, 0.75], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
     
     maxdi = max(data.params.di);
     dis = 1:maxdi; %4:5:maxdi;
@@ -99,6 +98,7 @@ for i = 1:length(dotmodes)
     uistack(dots, 'bottom');
     uistack(ebrs, 'bottom');
     uistack(crvs, 'bottom');
+    uistack(ln, 'bottom');
     
     set(gca, 'XTick', [1e-2, 1e-1, 0.5]);
     set(gca, 'XTickLabel', {'1', '10', '50'});

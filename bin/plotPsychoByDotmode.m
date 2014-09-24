@@ -1,5 +1,5 @@
 %%
-basename = 'pcorVsCohByDur_thresh_by_dotmode';
+basename = 'pcorVsCohByDotmode_thresh';
 data = loadFiles(basename, subj);
 outfile = fullfile('..', 'plots', ['psychoByDotmode' '-' subj '.' fig_ext]);
 

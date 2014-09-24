@@ -1,5 +1,5 @@
 %%
-basename = 'pcorVsDurByCoh';
+basename = 'pcorVsDurByDotmode';
 data = loadFiles(basename, subj);
 outfile = fullfile('..', 'plots', ['satExpByDotmode' '-' subj '.' fig_ext]);
 
