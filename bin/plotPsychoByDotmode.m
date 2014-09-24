@@ -1,7 +1,7 @@
 %%
 basename = 'pcorVsCohByDur_thresh_by_dotmode';
 data = loadFiles(basename, subj);
-outfile = fullfile('..', 'plots', [basename '-' subj '.' fig_ext]);
+outfile = fullfile('..', 'plots', ['psychoByDotmode' '-' subj '.' fig_ext]);
 
 %%
 
@@ -52,7 +52,8 @@ for i = 1:length(dotmodes)
     err = sqrt((yb.*(1-yb))./ns);
     errs = [err err];
 %     errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
-    errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    h = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    errorbar_tick(h, 0);
     
     scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');
     plot([thresh, thresh], [0.5, 0.75], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');

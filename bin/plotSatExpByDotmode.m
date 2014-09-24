@@ -1,7 +1,7 @@
 %%
 basename = 'pcorVsDurByCoh';
 data = loadFiles(basename, subj);
-outfile = fullfile('..', 'plots', [basename '-' subj '.' fig_ext]);
+outfile = fullfile('..', 'plots', ['satExpByDotmode' '-' subj '.' fig_ext]);
 
 %%
 
@@ -49,6 +49,7 @@ for i = 1:length(dotmodes)
     errs = [err err];
 %     errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
     ebr = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    errorbar_tick(ebr, 0);
     
     lbl = dotmode;
     vrt = plot([T, T], [0.4, 1.0], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
@@ -65,6 +66,7 @@ end
 %     text(T, 0.55 - (ii-1)*0.05, ['\rightarrow ' sprintf('%.0f', T) ' msec' ], 'FontSize', 14, 'FontWeight', 'bold');
 % end
 
+crvs = crvs(end:-1:1);
 uistack(dots, 'bottom');
 uistack(ebrs, 'bottom');
 uistack(crvs, 'bottom');

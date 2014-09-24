@@ -18,3 +18,6 @@ set(findall(gcf, 'Type', 'text'), 'FontName', FontName);
 set(findall(gcf, 'Type', 'text'), 'FontSize', FontSize);
 set(findall(gcf, 'Type', 'text'), 'FontWeight', FontWeight);
 set(gcf, 'Color', 'white');
+
+pos = [8 7];
+set(gcf, 'PaperSize', pos, 'PaperPosition', [0 0 pos]);

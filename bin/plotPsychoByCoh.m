@@ -1,7 +1,7 @@
 %%
 basename = 'pcorVsCohByDur_thresh';
 data = loadFiles(basename, subj);
-outfile = @(dotmode) fullfile('..', 'plots', [basename '-' subj '-' dotmode '.' fig_ext]);
+outfile = @(dotmode) fullfile('..', 'plots', ['psychoByCoh' '-' subj '-' dotmode '.' fig_ext]);
 
 %%
 
@@ -87,7 +87,7 @@ for i = 1:length(dotmodes)
         errs = [err err];
 %         errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));
         ebr = errorbar(xb, yb, errs(:,1), errs(:,2), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
-
+        errorbar_tick(ebr, 0);
 %         k = waitforbuttonpress
         dts = scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', color, 'LineWidth', lw1, 'HandleVisibility', 'off');
         
@@ -95,6 +95,7 @@ for i = 1:length(dotmodes)
         crvs = [crvs; crv];
         dots = [dots; dts];
     end
+    crvs = crvs(end:-1:1);
     uistack(dots, 'bottom');
     uistack(ebrs, 'bottom');
     uistack(crvs, 'bottom');

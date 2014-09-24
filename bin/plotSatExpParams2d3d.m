@@ -1,7 +1,7 @@
 %%
 basename = 'fitCurveVsDurByCoh';
 data = loadFiles(basename, subj);
-outfile = fullfile('..', 'plots', [basename '-' subj '-' param '.' fig_ext]);
+outfile = fullfile('..', 'plots', ['satExpParams2d3d' '-' subj '-' param '.' fig_ext]);
 
 %%
 
@@ -47,14 +47,14 @@ for i = 1:numel(cohs)
 %     h = errorbar(pts(i,1), pts(i,2), pts(i,5), pts(i,5), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
 %     herrorbar(pts(i,1), pts(i,2), pts(i,4), pts(i,4));%, 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
 end
-legend('Location', 'NorthWest');
+
 if strcmp(param, 'A')
     title('saturation accuracy');
-    xlabel('2d saturation %');
-    ylabel('3d saturation %');
+    xlabel('saturation accuracy %');
+    ylabel('saturation accuracy %');
     xlim([0.5, 1.0]);
     ylim([0.5, 1.0]);
-    plot([0.5, 1.0], [0.5, 1.0], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
+    ln = plot([0.5, 1.0], [0.5, 1.0], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
     set(gca, 'XTick', [0.5, 0.75, 1.0]);
     set(gca, 'XTickLabel', {'50', '75', '100'});
     set(gca, 'YTick', [0.5, 0.75, 1.0]);
@@ -65,17 +65,18 @@ elseif strcmp(param, 'T')
     ylabel('3d tau (msec)');
     xlim([0.0, 500]);
     ylim([0.0, 500]);
-    plot([0.0, 500], [0.0, 500], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
+    ln = plot([0.0, 500], [0.0, 500], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
     set(gca, 'XTick', [0, 250, 500]);
 %     set(gca, 'XTickLabel', {'0', '75', '100'});
     set(gca, 'YTick', [0, 250, 500]);
 %     set(gca, 'YTickLabel', {'50', '75', '100'});
 end
+uistack(ln, 'bottom');
 % set(gca,'XScale','log');
 
 % set(gcf, 'PaperSize', [5 5]);
 % set(gcf, 'PaperPosition', [0 0 5 5]);
-
+legend('Location', 'NorthWest');
 plotFormats;
 axis square;
 print(fig, ['-d' fig_ext], outfile);

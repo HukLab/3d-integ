@@ -1,7 +1,7 @@
 %%
 basename = 'pcor';
 data = loadFiles(basename, subj);
-outfile = fullfile('..', 'plots', [basename '-' subj '-' dotmode '.' fig_ext]);
+outfile = fullfile('..', 'plots', ['surface' '-' subj '-' dotmode '.' fig_ext]);
 
 %%
 
@@ -12,7 +12,7 @@ lw3 = 3;
 
 %%
 
-fig = figure(1);
+fig = figure(1); clf;
 title('motion threshold vs. duration (ms)');
 
 ic = strcmp(data.pts.dotmode, dotmode);
@@ -70,7 +70,7 @@ colors = colorSchemes(dotmode, 'dur', Ny);
 for ii = 1:Ny
     idx = grp2idx(ys) == ii;
     color = colors(ii,:);
-    plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
+%     plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
 end
 % plot3(xs, ys, zs, '.', 'Color', 'k', 'MarkerFaceColor', 'k', 'MarkerSize', sz);
 
@@ -84,7 +84,7 @@ set(gca, 'XTick', [1, 12, 50]);
 set(gca, 'XTickLabel', {'1', '12', '50'});
 xlabel('coherence (%)');
 ylabel('duration (ms)');
-zlabel('correct (%)');
+zlabel('% correct');
 xlim([min(xs) max(xs)]);
 ylim([min(ys) max(ys)]);
 % xlim([3, 50]);

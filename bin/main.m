@@ -8,14 +8,14 @@ function main()
     fig_ext = 'pdf';
 
     subj = 'ALL';
-    plotAll();
+    plotAll(subj, fig_ext);
     
     subj = 'KLB';
-    plotAll();
+%     plotAll(subj, fig_ext);
 
     close all;
 end
-function plotAll()
+function plotAll(subj, fig_ext)
     % surface
     dotmode = '2d';
     plotSurface;

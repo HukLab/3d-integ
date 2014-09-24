@@ -3,7 +3,7 @@ basename = 'pcorVsCohByDur_elbow';
 data = loadFiles(basename, subj);
 tmp = loadFiles('pcorVsCohByDur_thresh', subj);
 data.pts = tmp.params;
-outfile = fullfile('..', 'plots', [basename '-' subj '.' fig_ext]);
+outfile = fullfile('..', 'plots', ['bloch' '-' subj '.' fig_ext]);
 
 %%
 
@@ -51,7 +51,8 @@ for i = 1:length(dotmodes)
     
     xs = data.pts.dur(i1);
     ys = data.pts.sens(i1);
-    [ys, errs] = grpstats(ys, xs, {'mean', 'std'});
+    [ys, errs, ns] = grpstats(ys, xs, {'mean', 'std', 'numel'});
+    errs = errs./sqrt(ns);
     xs = unique(xs);
 
     m0 = median(data.params.m0(i2));
@@ -76,6 +77,7 @@ for i = 1:length(dotmodes)
     plot(xs2, yf2, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'HandleVisibility', 'off');
     
     h = errorbar(xs, ys, errs(:,1), 'Color', 'k', 'LineWidth', lw1, 'LineStyle', 'none', 'Marker', 'none', 'HandleVisibility', 'off');
+    errorbar_tick(h, 0);
     pts = [xs ys];
     for j = 1:numel(xs)
         color = colorOrder(j,:);
