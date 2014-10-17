@@ -7,9 +7,10 @@ outfile = @(dotmode) fullfile('..', 'plots', ['psychoByCoh' '-' subj '-' dotmode
 
 sz = 100;
 lw1 = 2;
-lw2 = 3;
-lw3 = 3;
+lw2 = 6;
+lw3 = 2;
 dotmodes = {'2d', '3d'};
+maxDur = 6000;
 
 %%
 for i = 1:length(dotmodes)
@@ -33,8 +34,8 @@ for i = 1:length(dotmodes)
     fig = figure(i); clf; hold on;
     set(gca, 'XScale', 'log');
     title([dotmode ': percent correct vs. motion coherence']);
-    xlabel('% coherence');
-    ylabel('% correct');
+    xlabel('% Coherence');
+    ylabel('% Correct');
     ln = plot([0.02, 0.7], [0.75, 0.75], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
     
     maxdi = max(data.params.di);
@@ -76,11 +77,17 @@ for i = 1:length(dotmodes)
         yf = 0.5 + (1 - 0.5 - lapse)*cdf('logistic', xf, loc, scale);
         
         color = colorOrder(dii, :);
-        dur = f2.dur(f2.di == dii);
-        lbl = num2str(sprintf('%.0f', dur(1)));
+        dur1 = f2.dur(f2.di == dii);
+        dur2 = f2.dur(f2.di == dii+1);
+        if isempty(dur2)
+            dur2 = [maxDur];
+        end
+        lbl1 = num2str(sprintf('%.0f', dur1(1)));
+        lbl2 = num2str(sprintf('%.0f', dur2(1)));
+        lbl = [num2str(lbl1) '-' num2str(lbl2) ' msec'];
 %         plot([thresh, thresh], [0.4, 0.75], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
 %         text(thresh, 0.48, [sprintf('%.0f%%', thresh*100)], 'FontSize', 14, 'FontWeight', 'bold');
-        crv = plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', [num2str(lbl) ' msec']);
+        crv = plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', lbl);
         
         err = sqrt((yb.*(1-yb))./ns);
         errs = [err err];
@@ -100,8 +107,11 @@ for i = 1:length(dotmodes)
     uistack(crvs, 'bottom');
     uistack(ln, 'bottom');
     
-    set(gca, 'XTick', [1e-2, 1e-1, 0.5]);
-    set(gca, 'XTickLabel', {'1', '10', '50'});
+    xticks = [0.03, 0.06, 0.12, 0.25, 0.5];
+    xtf = @(x) sprintf('%.0f', x);
+    xticklbls = arrayfun(xtf, 100*xticks, 'UniformOutput', false);
+    set(gca, 'XTick', xticks);
+    set(gca, 'XTickLabel', xticklbls);
     set(gca, 'YTick', [0.5, 0.75, 1.0]);
     set(gca, 'YTickLabel', {'50', '75', '100'});
     legend('Location', 'NorthWest');

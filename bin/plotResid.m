@@ -17,6 +17,7 @@ dotmodes = {'2d', '3d'};
 
 %%
 
+noResid = false;
 for i = 1:length(dotmodes)
     dotmode = dotmodes{i};
     i1 = strcmp(data.pts.dotmode, dotmode);
@@ -30,7 +31,9 @@ for i = 1:length(dotmodes)
     
     fig = figure(i); clf; hold on;
     set(gca, 'XScale', 'log');
-%     set(gca, 'YScale', 'log');
+    if noResid
+        set(gca, 'YScale', 'log');
+    end
     title('motion threshold vs. duration (ms)');
     xlabel('duration (ms)');
     ylabel('motion sensitivity');
@@ -69,16 +72,10 @@ for i = 1:length(dotmodes)
     yfA = [yf0; yf1];
     
     m0 = median(data.params2.m0(i3));
-    m1 = median(data.params2.m1(i3));
     b0 = median(data.params2.b0(i3));
-    b1 = median(data.params2.b1(i3));
-    x02 = median(data.params2.x0(i3));
     
-    xs0 = xs(xs < exp(x02));
-    xs1 = xs(xs >= exp(x02));
-    yf0 = xs0.^m0*exp(b0);
-    yf1 = xs1.^m1*exp(b1);
-    yfB = [yf0; yf1];
+    xs0 = xs;
+    yfB = xs0.^m0*exp(b0);
     
     valsA = (yfA - ys)./errs;
     valsB = (yfB - ys)./errs;
@@ -86,21 +83,31 @@ for i = 1:length(dotmodes)
     vals_rng = [min(vals) max(vals)];
         
     lbl = dotmode;
-%     scatter(xs, yfA, sz, 'MarkerFaceColor', 'k', 'MarkerEdgeColor', 'k');
-%     scatter(xs, yfB, sz, 'MarkerFaceColor', cmap{i}, 'MarkerEdgeColor', 'k');
-%     plot(xs, ys, '-', 'LineWidth', lw2, 'Color', cmap{i});
-    lblA = '2-elb';
-    lblB = '1-elb';
-    plot([min(xs) max(xs)], [0 0], '--', 'LineWidth', lw2, 'Color', [0.5 0.5 0.5], 'HandleVisibility', 'off');
-    plot(xs, valsB, 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lblB);
-    plot(xs, valsA, 'Color', 'k', 'LineWidth', lw2, 'DisplayName', lblA);
+    if noResid
+        scatter(xs, yfA, sz, 'MarkerFaceColor', 'k', 'MarkerEdgeColor', 'k');
+%         scatter(xs, yfB, sz, 'MarkerFaceColor', cmap{i}, 'MarkerEdgeColor', 'k');
+        plot(xs, ys, '-', 'LineWidth', lw2, 'Color', cmap{i});
+    else
+        lblA = '2-elb';
+        lblB = '1-elb';
+        plot([min(xs) max(xs)], [0 0], '--', 'LineWidth', lw2, 'Color', [0.5 0.5 0.5], 'HandleVisibility', 'off');
+        plot(xs, valsB, 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lblB);
+        plot(xs, valsA, 'Color', 'k', 'LineWidth', lw2, 'DisplayName', lblA);
+    end
+%     HA = area(xs, valsA, 'FaceColor', 'k', 'HandleVisibility', 'off');
+%     HB = area(xs, valsB, 'FaceColor', cmap{i}, 'HandleVisibility', 'off');
+%     hA = get(HA, 'children');
+%     set(hA, 'FaceAlpha', 0.5);
+%     hB = get(HB, 'children');
+%     set(hB, 'FaceAlpha', 0.2);
+%     alpha(0.5);
     
-    
-    xlim([min(xs)-10, max(xs)+50]);
-    yrng = [-12 12];
-    ylim(yrng);
-    plot([exp(x02) exp(x02)], yrng, '--', 'Color', cmap{i}, 'LineWidth', lw2, 'HandleVisibility', 'off');
-    plot([exp(x0) exp(x0)], yrng, '--', 'Color', 'k', 'LineWidth', lw2, 'HandleVisibility', 'off');
+    xlim([min(xs), max(xs)+50]);
+    if ~noResid
+        yrng = [-12 12];
+        ylim(yrng);
+        plot([exp(x0) exp(x0)], yrng, '--', 'Color', 'k', 'LineWidth', lw2, 'HandleVisibility', 'off');
+    end
 
     xticks = [10, 100, 200, 1000];
     xtf = @(x) sprintf('%.0f', x);
@@ -120,7 +127,7 @@ for i = 1:length(dotmodes)
     % set(gca, 'YTick', yticks);
     % set(gca, 'YTickLabel', yticklbls);
 
-    legend('Location', 'NorthWest');
+    legend('Location', 'NorthEast');
     plotFormats;
     print(fig, ['-d' fig_ext], outfile(dotmode));
 end

@@ -7,7 +7,7 @@ outfile = fullfile('..', 'plots', ['satExpByDotmode' '-' subj '.' fig_ext]);
 
 sz = 100;
 lw1 = 2;
-lw2 = 3;
+lw2 = 6;
 lw3 = 3;
 x_delay = 0; % (ms)
 cmap = colorSchemes('both');
@@ -18,8 +18,8 @@ dotmodes = {'2d', '3d'};
 fig = figure(1); clf; hold on;
 set(gca, 'XScale', 'log');
 title('Percent correct vs. duration (ms)');
-xlabel('duration (ms)');
-ylabel('% correct');
+xlabel('Duration (ms)');
+ylabel('% Correct');
 
 vrts = [];
 dots = [];
@@ -52,7 +52,7 @@ for i = 1:length(dotmodes)
     errorbar_tick(ebr, 0);
     
     lbl = dotmode;
-    vrt = plot([T, T], [0.4, 1.0], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
+%     vrt = plot([T, T], [0.4, 1.0], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
     crv = plot(xf, yf, '-', 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lbl);
     dts = scatter(xb, yb, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{i}, 'LineWidth', lw1, 'HandleVisibility', 'off');
 
@@ -70,14 +70,14 @@ crvs = crvs(end:-1:1);
 uistack(dots, 'bottom');
 uistack(ebrs, 'bottom');
 uistack(crvs, 'bottom');
-uistack(vrts, 'bottom');
+% uistack(vrts, 'bottom');
 
-set(gca, 'XTick', [10, 100, 1000]);
-set(gca, 'XTickLabel', {'10', '100', '1000'});
+set(gca, 'XTick', [33, 200, 1000, 6000]);
+set(gca, 'XTickLabel', {'33', '200', '1000', '6000'});
 set(gca, 'YTick', [0.5, 0.75, 1.0]);
 set(gca, 'YTickLabel', {'50', '75', '100'});
 legend('Location', 'NorthWest');
-xlim([min(data.pts.xs), max(data.pts.xs)]);
+xlim([floor(min(data.pts.xs)), 6000]);
 ylim([0.5 1.0]);
 plotFormats;
 print(fig, ['-d' fig_ext], outfile);

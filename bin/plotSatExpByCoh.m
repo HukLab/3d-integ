@@ -7,7 +7,7 @@ outfile = @(dotmode) fullfile('..', 'plots', ['satExpByCoh' '-' subj '-' dotmode
 
 sz = 100;
 lw1 = 2;
-lw2 = 3;
+lw2 = 6;
 lw3 = 3;
 dotmodes = {'2d', '3d'};
 
@@ -23,9 +23,9 @@ for i = 1:length(dotmodes)
 
     fig = figure(i); clf; hold on;
     title([dotmode ': percent correct vs. duration (ms)']);
-    xlabel('duration (ms)');
-    ylabel('% correct');
-    xlim([30, 1000]);
+    xlabel('Duration (ms)');
+    ylabel('% Correct');
+    xlim([30, 6000]);
     ylim([0.45, 1.0]);
     set(gca,'XScale','log');
     
@@ -76,8 +76,8 @@ for i = 1:length(dotmodes)
     uistack(ebrs, 'bottom');
     uistack(crvs, 'bottom');
     
-    set(gca, 'XTick', [10, 100, 1000]);
-    set(gca, 'XTickLabel', {'10', '100', '1000'});
+    set(gca, 'XTick', [33, 200, 1000, 6000]);
+    set(gca, 'XTickLabel', {'33', '200', '1000', '6000'});
     set(gca, 'YTick', [0.5, 0.75, 1.0]);
     set(gca, 'YTickLabel', {'50', '75', '100'});
     lh = legend('Location', 'NorthWest');
