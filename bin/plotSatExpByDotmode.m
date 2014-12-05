@@ -17,8 +17,8 @@ dotmodes = {'2d', '3d'};
 
 fig = figure(1); clf; hold on;
 set(gca, 'XScale', 'log');
-title('Percent correct vs. duration (ms)');
-xlabel('Duration (ms)');
+% title('Percent correct vs. duration (msec)');
+xlabel('Duration (msec)');
 ylabel('% Correct');
 
 vrts = [];
@@ -58,7 +58,7 @@ for i = 1:length(dotmodes)
 
     ebrs = [ebrs; ebr];
     dots = [dots; dts];
-    vrts = [vrts; vrt];
+%     vrts = [vrts; vrt];
     crvs = [crvs; crv];
 end
 % for ii = 1:numel(Ts)
@@ -78,6 +78,6 @@ set(gca, 'YTick', [0.5, 0.75, 1.0]);
 set(gca, 'YTickLabel', {'50', '75', '100'});
 legend('Location', 'NorthWest');
 xlim([floor(min(data.pts.xs)), 6000]);
-ylim([0.5 1.0]);
+ylim([0.45 1.0]);
 plotFormats;
 print(fig, ['-d' fig_ext], outfile);

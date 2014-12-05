@@ -10,7 +10,7 @@ function main()
     subj = 'ALL';
     plotAll(subj, fig_ext);
     
-    subj = 'KLB';
+%     subj = 'KLB';
 %     plotAll(subj, fig_ext);
 
     close all;
@@ -26,16 +26,17 @@ function plotAll(subj, fig_ext)
     plotPsychoByCoh;
     plotPsychoByDotmode;
     plotBloch;
+    plotBloch_1Elb;
     
     % sat-exp curve
     plotSatExpByCoh;
     plotSatExpByDotmode;
     
     % sat-exp params
-    param = 'A';
-    plotSatExpParamsCoh;
-    plotSatExpParams2d3d;
-    param = 'T';
-    plotSatExpParamsCoh;
-    plotSatExpParams2d3d;
+%     param = 'A';
+%     plotSatExpParamsCoh;
+%     plotSatExpParams2d3d;
+%     param = 'T';
+%     plotSatExpParamsCoh;
+%     plotSatExpParams2d3d;
 end

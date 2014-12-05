@@ -22,11 +22,9 @@ for i = 1:length(dotmodes)
     end
 
     fig = figure(i); clf; hold on;
-    title([dotmode ': percent correct vs. duration (ms)']);
-    xlabel('Duration (ms)');
-    ylabel('% Correct');
-    xlim([30, 6000]);
-    ylim([0.45, 1.0]);
+%     title([dotmode ': percent correct vs. duration (msec)']);
+    xlabel('Duration (msec)');
+    ylabel('% Correct');    
     set(gca,'XScale','log');
     
     crvs = [];
@@ -59,6 +57,8 @@ for i = 1:length(dotmodes)
         B = mean(B);
         T = mean(T);
         
+        disp([dotmode ' ' num2str(coh) ' ' num2str(A)])
+        
         color = colorOrder(ci, :);
         lbl = num2str(sprintf('%d%%', coh*100));
 %         plot([T+x_delay, T+x_delay], [0.4, 1.0], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
@@ -75,6 +75,9 @@ for i = 1:length(dotmodes)
     uistack(dots, 'bottom');
     uistack(ebrs, 'bottom');
     uistack(crvs, 'bottom');
+    
+    xlim([floor(min(data.pts.xs)), 6000]);
+    ylim([0.45, 1.0]);
     
     set(gca, 'XTick', [33, 200, 1000, 6000]);
     set(gca, 'XTickLabel', {'33', '200', '1000', '6000'});

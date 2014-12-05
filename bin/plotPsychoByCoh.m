@@ -33,14 +33,14 @@ for i = 1:length(dotmodes)
 
     fig = figure(i); clf; hold on;
     set(gca, 'XScale', 'log');
-    title([dotmode ': percent correct vs. motion coherence']);
+%     title([dotmode ': percent correct vs. motion coherence']);
     xlabel('% Coherence');
     ylabel('% Correct');
-    ln = plot([0.02, 0.7], [0.75, 0.75], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
+    ln = plot([0.022, 0.7], [0.75, 0.75], ':', 'Color', [0.8 0.8 0.8], 'LineWidth', lw3, 'HandleVisibility', 'off');
     
     maxdi = max(data.params.di);
     dis = 1:maxdi; %4:5:maxdi;
-    dis = [5 10 15 20];
+    dis = [3 5 10 20];
     colorOrder = colorSchemes(dotmode, 'dur', max(data.params.di));
     
     ebrs = [];
@@ -51,7 +51,7 @@ for i = 1:length(dotmodes)
         xb = f1.x(f1.di == dii);
         yb = f1.y(f1.di == dii);
         ns = f1.ntrials(f1.di == dii);
-        xf = linspace(min(xb), max(xb));
+        xf = linspace(0.027, 0.55);%min(xb), max(xb)+0.5);
         
         scales = f2.scale(f2.di == dii);
         locs = f2.loc(f2.di == dii);
@@ -89,6 +89,9 @@ for i = 1:length(dotmodes)
 %         text(thresh, 0.48, [sprintf('%.0f%%', thresh*100)], 'FontSize', 14, 'FontWeight', 'bold');
         crv = plot(xf, yf, '-', 'Color', color, 'LineWidth', lw2, 'DisplayName', lbl);
         
+        disp([dotmode ' ' num2str(dii) ' ' num2str(thresh) ' ' num2str(100*mean(threshes(~isnan(threshes))))])
+        
+%         plot([thresh, thresh], [0.5, 0.75], '--', 'Color', color, 'LineWidth', lw3, 'HandleVisibility', 'off');
         err = sqrt((yb.*(1-yb))./ns);
         errs = [err err];
 %         errs = abs(pcorBootstrap(xb, yb, ns) - repmat(yb, 1, 2));

@@ -7,8 +7,8 @@ outfile = fullfile('..', 'plots', ['psychoByDotmode' '-' subj '.' fig_ext]);
 
 sz = 100;
 lw1 = 2;
-lw2 = 3;
-lw3 = 3;
+lw2 = 6;
+lw3 = 2;
 cmap = colorSchemes('both');
 dotmodes = {'2d', '3d'};
 
@@ -16,10 +16,10 @@ dotmodes = {'2d', '3d'};
     
 fig = figure(1); clf; hold on;
 set(gca, 'XScale', 'log');
-title('Percent correct vs. motion coherence');
-xlabel('% coherence');
-ylabel('% correct');
-plot([0.02, 0.7], [0.75, 0.75], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
+% title('Percent correct vs. motion coherence');
+xlabel('% Coherence');
+ylabel('% Correct');
+plot([0.02, 0.7], [0.75, 0.75], ':', 'Color', [0.8 0.8 0.8], 'LineWidth', lw3, 'HandleVisibility', 'off');
 
 for i = 1:length(dotmodes)
     dotmode = dotmodes{i};
@@ -30,7 +30,7 @@ for i = 1:length(dotmodes)
     end
     xb = data.pts.x(i1);
     yb = data.pts.y(i1);
-    ns = data.pts.ntrials(i1);   
+    ns = data.pts.ntrials(i1);
     xf = linspace(min(xb), max(xb));
 
     scales = data.params.scale(i2);
@@ -62,13 +62,16 @@ for i = 1:length(dotmodes)
     text(thresh, 0.52, ['  ' sprintf('%.0f%%', thresh*100)], 'FontSize', 14, 'FontWeight', 'bold');
 end
 
-set(gca, 'XTick', [1e-2, 1e-1, 0.5]);
-set(gca, 'XTickLabel', {'1', '10', '50'});
+xticks = [0.03, 0.06, 0.12, 0.25, 0.5];
+xtf = @(x) sprintf('%.0f', x);
+xticklbls = arrayfun(xtf, 100*xticks, 'UniformOutput', false);
+set(gca, 'XTick', xticks);
+set(gca, 'XTickLabel', xticklbls);
 set(gca, 'YTick', [0.5, 0.75, 1.0]);
 set(gca, 'YTickLabel', {'50', '75', '100'});
 xlim([0.02, 0.7]);
 ylim([0.5 1.0]);
-text(0.05, 0.85, 'N=5');
+% text(0.05, 0.85, 'N=5');
 legend('Location', 'NorthWest');
 plotFormats;
 print(fig, ['-d' fig_ext], outfile);

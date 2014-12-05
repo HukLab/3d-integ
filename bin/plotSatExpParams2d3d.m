@@ -52,8 +52,8 @@ end
 
 if strcmp(param, 'A')
     title('saturation accuracy');
-    xlabel('saturation accuracy %');
-    ylabel('saturation accuracy %');
+    xlabel('2D saturation accuracy %');
+    ylabel('3D saturation accuracy %');
     xlim([0.5, 1.0]);
     ylim([0.5, 1.0]);
     ln = plot([0.5, 1.0], [0.5, 1.0], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');
@@ -63,8 +63,8 @@ if strcmp(param, 'A')
     set(gca, 'YTickLabel', {'50', '75', '100'});
 elseif strcmp(param, 'T')
     title('tau');
-    xlabel('2d tau (msec)');
-    ylabel('3d tau (msec)');
+    xlabel('2D tau (msec)');
+    ylabel('3D tau (msec)');
     xlim([0.0, 500]);
     ylim([0.0, 500]);
     ln = plot([0.0, 500], [0.0, 500], '--', 'Color', 'k', 'LineWidth', lw3, 'HandleVisibility', 'off');

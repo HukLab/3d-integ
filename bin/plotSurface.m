@@ -3,10 +3,10 @@ basename = 'pcor';
 data = loadFiles(basename, subj);
 outfile = fullfile('..', 'plots', ['surface' '-' subj '-' dotmode '.' fig_ext]);
 
-isFineGrid = true; % specifies surface shading by %-cor (t) or data dim (f)
-showDurData = true; % controls plotting of data points and lines for dur
-showCohData = false; % controls plotting of data points and lines for coh
-% colorType = 'dur'; % if ~isFineGrid, data dimension for surface shading
+isFineGrid = false; % specifies surface shading by %-cor (t) or data dim (f)
+showDurData = false; % controls plotting of data points and lines for dur
+showCohData = true; % controls plotting of data points and lines for coh
+colorType = 'dur'; % if ~isFineGrid, data dimension for surface shading
 
 %%
 
@@ -14,23 +14,32 @@ sz = 1;
 lw1 = 3;
 lw2 = 3;
 lw3 = 3;
+maxDur = 6000;
+nColors = 20;
 
 %%
 
 fig = figure(1); clf;
-title('motion threshold vs. duration (ms)');
+% title('motion threshold vs. duration (msec)');
 
 ic = strcmp(data.pts.dotmode, dotmode);
 xs = 100*data.pts.coh(ic);
 ys = 1000*data.pts.dur(ic);
 zs = data.pts.pc(ic);
-% f = scatteredInterpolant(xs, ys, zs); % >= 2014a
+
+% add extra data strip at maxDur, duplicating previous data
+% xs1 = xs(ys == max(ys));
+% zs1 = zs(ys == max(ys));
+% xs = [xs; xs1];
+% zs = [zs; zs1];
+% ys = [ys; maxDur*ones(numel(xs1), 1)];
 
 xlin = unique(xs);
 ylin = unique(ys);
 Nx = numel(xlin);
 Ny = numel(ylin);
 
+f = scatteredInterpolant(xs, ys, zs); % >= 2014a
 if isFineGrid
     colormap(colorSchemes(dotmode, 'surf', 50));
     xlin = logspace(log10(min(xs)), log10(max(xs)), 200);
@@ -49,7 +58,17 @@ else
         case 'coh'
             N = Nx;
             cm = repmat(1:N, Ny, 1);
-    end    
+    end
+    tm = repmat(1:nColors, floor(N/nColors), 1);
+    ex = [tm(:); (nColors+1)*ones(N - numel(tm), 1)]';
+    switch colorType
+        case 'dur'
+            N = Ny;
+            cm = repmat(ex, Nx, 1)';
+        case 'coh'
+            N = Nx;
+            cm = repmat(ex, Ny, 1);
+    end
     colormap(colorSchemes(dotmode, colorType, N));
     surf(gca, X, Y, Z, cm, 'EdgeColor', 'none');
 end
@@ -70,7 +89,11 @@ for ii = 1:Ny
     idx = grp2idx(ys) == ii;
     color = colors(ii,:);
     if showDurData
-        plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
+        if isFineGrid
+            plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
+        else
+            plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', 'k', 'LineWidth', 1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
+        end
         plot3(xs(idx), ys(idx), zs(idx), '.', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
     end
 end
@@ -85,7 +108,7 @@ set(gca, 'YTickLabel', {'33', '200', '1000', '6000'});
 set(gca, 'XTick', [3, 6, 12, 25, 50]);
 set(gca, 'XTickLabel', {'3', '6', '12', '25', '50'});
 xlabel('Coherence (%)');
-ylabel('Duration (ms)');
+ylabel('Duration (msec)');
 zlabel('% Correct');
 xlim([min(xs) max(xs)]);
 ylim([min(floor(ys)) 6000]);

@@ -6,7 +6,7 @@ function cmap = colorSchemes(dotmode, name, N)
             endColor = color2d;
             switch name
                 case 'dur'
-                    startColor = [1.0 0.8 0.0];
+                    startColor = [0.2 0.8 0.4];
                 case 'coh'
                     startColor = [0.7 0.8 1.0];
                 case 'surf'
@@ -26,6 +26,11 @@ function cmap = colorSchemes(dotmode, name, N)
             end
         case 'both'
             cmap = {color2d, color3d};
+            return;
+        case 'resid'
+            color2dPrime = [0.65, 0.65, 0.9];
+            color3dPrime = [0.9, 0.65, 0.65];
+            cmap = {color2d, color2dPrime, color3d, color3dPrime};
             return;
     end
     cmap = colorGradient(N, startColor, endColor);

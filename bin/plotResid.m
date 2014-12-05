@@ -1,18 +1,18 @@
 %%
 data = loadFiles('pcorVsCohByDur_elbow', subj);
-data2 = loadFiles('pcorVsCohByDur_1elbow', subj);
+data2 = loadFiles('pcorVsCohByDur_0elbow', subj);
 tmp = loadFiles('pcorVsCohByDur_thresh', subj);
 data.pts = tmp.params;
 data.params2 = data2.params;
-outfile = @(dotmode) fullfile('..', 'plots', ['elbowResiduals' '-' subj '-' dotmode '.' fig_ext]);
+outfile = @(dotmode) fullfile('..', 'plots', ['elbowResiduals0' '-' subj '-' dotmode '.' fig_ext]);
 
 %%
 
 sz = 100;
 lw1 = 2;
-lw2 = 3;
-lw3 = 3;
-cmap = colorSchemes('both');
+lw2 = 6;
+lw3 = 2;
+cmap = colorSchemes('resid');
 dotmodes = {'2d', '3d'};
 
 %%
@@ -26,30 +26,6 @@ for i = 1:length(dotmodes)
     if sum(i1) == 0 || sum(i2) == 0
         continue
     end
-    maxdi = round(1.2*max(data.pts.di));
-    colorOrder = colorSchemes(dotmode, 'dur', max(data.pts.di));
-    
-    fig = figure(i); clf; hold on;
-    set(gca, 'XScale', 'log');
-    if noResid
-        set(gca, 'YScale', 'log');
-    end
-    title('motion threshold vs. duration (ms)');
-    xlabel('duration (ms)');
-    ylabel('motion sensitivity');
-    yl = [max(min(data.pts.sens), 1e-1) max(data.pts.sens)];
-    
-    xs = data.pts.dur(i1);
-    ys = data.pts.sens(i1);
-    [ys, errs] = grpstats(ys, xs, {'mean', 'std'});
-    xs = unique(xs);
-    
-    if strcmp(dotmode, '3d')
-        xs = xs(2:end);
-        ys = ys(2:end);
-        errs = errs(2:end);
-    end
-
     m0 = median(data.params.m0(i2));
     m1 = median(data.params.m1(i2));
     m2 = median(data.params.m2(i2));
@@ -58,6 +34,27 @@ for i = 1:length(dotmodes)
     b2 = median(data.params.b2(i2));
     x0 = median(data.params.x0(i2));
     x1 = median(data.params.x1(i2));
+    
+    maxdi = round(1.2*max(data.pts.di));
+    colorOrder = colorSchemes(dotmode, 'dur', max(data.pts.di));
+    
+    fig = figure(i); clf; hold on;
+    set(gca, 'XScale', 'log');
+    xlabel('Duration (msec)');
+    ylabel('Motion sensitivity residual');
+    yl = [max(min(data.pts.sens), 1e-1) max(data.pts.sens)];
+    
+    xs = data.pts.dur(i1);
+    ys = data.pts.sens(i1);
+    [ys, errs] = grpstats(ys, xs, {'mean', 'std'});
+    xs = unique(xs);
+    
+    % ignore first 2 in 3d
+    if strcmp(dotmode, '3d')
+        xs = xs(3:end);
+        ys = ys(3:end);
+        errs = errs(3:end);
+    end
     
     % ignore xs past second elbow
     xs = xs(xs <= exp(x1));
@@ -77,57 +74,45 @@ for i = 1:length(dotmodes)
     xs0 = xs;
     yfB = xs0.^m0*exp(b0);
     
-    valsA = (yfA - ys)./errs;
-    valsB = (yfB - ys)./errs;
+    valsA = (ys - yfA)./errs;
+    valsB = (ys - yfB)./errs;
     vals = [valsA; valsB];
     vals_rng = [min(vals) max(vals)];
-        
-    lbl = dotmode;
-    if noResid
-        scatter(xs, yfA, sz, 'MarkerFaceColor', 'k', 'MarkerEdgeColor', 'k');
-%         scatter(xs, yfB, sz, 'MarkerFaceColor', cmap{i}, 'MarkerEdgeColor', 'k');
-        plot(xs, ys, '-', 'LineWidth', lw2, 'Color', cmap{i});
-    else
-        lblA = '2-elb';
-        lblB = '1-elb';
-        plot([min(xs) max(xs)], [0 0], '--', 'LineWidth', lw2, 'Color', [0.5 0.5 0.5], 'HandleVisibility', 'off');
-        plot(xs, valsB, 'Color', cmap{i}, 'LineWidth', lw2, 'DisplayName', lblB);
-        plot(xs, valsA, 'Color', 'k', 'LineWidth', lw2, 'DisplayName', lblA);
-    end
-%     HA = area(xs, valsA, 'FaceColor', 'k', 'HandleVisibility', 'off');
-%     HB = area(xs, valsB, 'FaceColor', cmap{i}, 'HandleVisibility', 'off');
-%     hA = get(HA, 'children');
-%     set(hA, 'FaceAlpha', 0.5);
-%     hB = get(HB, 'children');
-%     set(hB, 'FaceAlpha', 0.2);
-%     alpha(0.5);
-    
-    xlim([min(xs), max(xs)+50]);
-    if ~noResid
-        yrng = [-12 12];
-        ylim(yrng);
-        plot([exp(x0) exp(x0)], yrng, '--', 'Color', 'k', 'LineWidth', lw2, 'HandleVisibility', 'off');
-    end
 
-    xticks = [10, 100, 200, 1000];
+    lbl = dotmode;
+    lblA = 'tri-limb fit';
+    lblB = 'bi-limb fit';
+    zer = plot([min(xs) max(xs)], [0 0], ':', 'Color', [0.8 0.8 0.8], 'LineWidth', lw3, 'HandleVisibility', 'off');
+    dt1 = scatter(xs, valsA, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    dt2 = scatter(xs, valsB, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{2*(i-1)+1}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    ln1 = plot(xs, valsA, 'Color', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'DisplayName', lblA);
+    ln2 = plot(xs, valsB, 'Color', cmap{2*(i-1)+1}, 'LineWidth', lw1, 'DisplayName', lblB);
+
+    xrng = [30.0, 1025.0];
+    yrng = [-17 10];
+    xlim(xrng);
+    ylim(yrng);
+    elb = plot([exp(x0) exp(x0)], yrng, '--', 'Color', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    
+    uistack(dt1, 'bottom');
+    uistack(dt2, 'bottom');
+    uistack(ln1, 'bottom');
+    uistack(ln2, 'bottom');
+    uistack(elb, 'bottom');
+    uistack(zer, 'bottom');
+
+    xticks = [33, 200, 1000];
     xtf = @(x) sprintf('%.0f', x);
     xticklbls = arrayfun(xtf, xticks, 'UniformOutput', false);
 
-    yticks = [1, 10, 100];
+    yticks = [33, 200, 1000];
     ytf = @(x) sprintf('%.0f', x);
     yticklbls = arrayfun(ytf, yticks, 'UniformOutput', false);
 
-    % xticks = sort([xthresh [10, 100, 1000]]);
-    % xticks = uncrowdTicks(xthresh, 1, true);
-    % set(gca, 'XTick', xticks);
-    % set(gca, 'XTickLabel', xticklbls);
-
     set(gca, 'XTick', xticks);
     set(gca, 'XTickLabel', xticklbls);
-    % set(gca, 'YTick', yticks);
-    % set(gca, 'YTickLabel', yticklbls);
-
-    legend('Location', 'NorthEast');
+    
+    legend('Location', 'NorthWest');
     plotFormats;
     print(fig, ['-d' fig_ext], outfile(dotmode));
 end
