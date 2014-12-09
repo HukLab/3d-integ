@@ -5,7 +5,7 @@ outfile = fullfile('..', 'plots', ['psychoByDotmode' '-' subj '.' fig_ext]);
 
 %%
 
-sz = 100;
+sz = 180;
 lw1 = 2;
 lw2 = 6;
 lw3 = 2;
@@ -17,7 +17,7 @@ dotmodes = {'2d', '3d'};
 fig = figure(1); clf; hold on;
 set(gca, 'XScale', 'log');
 % title('Percent correct vs. motion coherence');
-xlabel('% Coherence');
+xlbl = xlabel('% Coherence');
 ylabel('% Correct');
 plot([0.02, 0.7], [0.75, 0.75], ':', 'Color', [0.8 0.8 0.8], 'LineWidth', lw3, 'HandleVisibility', 'off');
 
@@ -59,7 +59,7 @@ for i = 1:length(dotmodes)
     plot([thresh, thresh], [0.5, 0.75], '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
     
     % '\leftarrow '
-    text(thresh, 0.52, ['  ' sprintf('%.0f%%', thresh*100)], 'FontSize', 14, 'FontWeight', 'bold');
+    text(thresh, 0.52, ['  ' sprintf('%.0f%%', thresh*100)], 'FontSize', 14, 'FontWeight', 'bold', 'FontAngle', 'italic');
 end
 
 xticks = [0.03, 0.06, 0.12, 0.25, 0.5];
@@ -71,7 +71,11 @@ set(gca, 'YTick', [0.5, 0.75, 1.0]);
 set(gca, 'YTickLabel', {'50', '75', '100'});
 xlim([0.02, 0.7]);
 ylim([0.5 1.0]);
-% text(0.05, 0.85, 'N=5');
-legend('Location', 'NorthWest');
+if strcmpi(subj, 'ALL')
+    text(0.04, 0.85, '{\itAll subjects}');
+else
+    text(0.04, 0.85, '{\itOne subject}');
+end
+leg = legend('Location', 'NorthWest');
 plotFormats;
 print(fig, ['-d' fig_ext], outfile);

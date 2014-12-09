@@ -13,7 +13,7 @@ outfile = fullfile('..', 'plots', ['surface' '-' subj '-' dotmode '.' fig_ext]);
 
 sz = 1;
 lw1 = 3;
-lw2 = 3;
+lw2 = 2;
 lw3 = 3;
 maxDur = 6000;
 nColors = 20;
@@ -71,7 +71,7 @@ else
             cm = repmat(ex, Ny, 1);
     end
     colormap(colorSchemes(dotmode, colorType, N));
-    surf(gca, X, Y, Z, cm, 'EdgeColor', 'none');
+    sf = surf(gca, X, Y, Z, cm, 'EdgeColor', 'none');
 end
 % axis tight;
 hold on;
@@ -108,15 +108,34 @@ set(gca, 'YTick', [33, 200, 1000, 6000]);
 set(gca, 'YTickLabel', {'33', '200', '1000', '6000'});
 set(gca, 'XTick', [3, 6, 12, 25, 50]);
 set(gca, 'XTickLabel', {'3', '6', '12', '25', '50'});
-xlabel('Coherence (%)');
-ylabel('Duration (msec)');
+xlbl = xlabel('Coherence (%)');
+ylbl = ylabel('Duration (msec)');
 zlabel('% Correct');
 xlim([min(xs) max(xs)]);
 ylim([min(floor(ys)) 6000]);
-% xlim([3, 50]);
-% ylim([1, 2000]);
 zlim([0.46, 1.05]);
-% legend('Location', 'NorthWest');
+
+xl = xlim;
+yl = ylim;
+zl = zlim;
+axb1 = plot3([xl(1), xl(2)], [yl(2), yl(2)], [zl(2) zl(2)], 'Color', 'k', 'LineWidth', lw2);
+axb2 = plot3([xl(2), xl(2)], [yl(1), yl(2)], [zl(2) zl(2)], 'Color', 'k', 'LineWidth', lw2);
+axb3 = plot3([xl(2), xl(2)], [yl(1), yl(1)], [zl(1) zl(2)], 'Color', 'k', 'LineWidth', lw2);
+% axb4 = plot3([xl(1), xl(2)], [yl(2), yl(2)], [zl(1) zl(1)], 'Color', 'k', 'LineWidth', lw2);
+% axb5 = plot3([xl(2), xl(2)], [yl(1), yl(2)], [zl(1) zl(1)], 'Color', 'k', 'LineWidth', lw2);
+axb6 = plot3([xl(2), xl(2)], [yl(2), yl(2)], [zl(1) zl(2)], 'Color', 'k', 'LineWidth', lw2);
+% uistack([axb1 axb2 axb3 axb6], 'bottom');
 plotFormats;
+
+set(xlbl, 'Units', 'normalized');
+set(ylbl, 'Units', 'normalized');
+xbnds = get(xlbl, 'Position');
+ybnds = get(ylbl, 'Position');
+xbnds(1) = 0.6;
+xbnds(2) = ybnds(2);
+ybnds(1) = 0.3;
+set(xlbl, 'Position', xbnds);
+set(ylbl, 'Position', ybnds);
+
 grid off;
 print(gcf, ['-d' fig_ext], outfile);

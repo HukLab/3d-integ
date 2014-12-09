@@ -8,7 +8,7 @@ outfile = @(dotmode) fullfile('..', 'plots', ['elbowResiduals0' '-' subj '-' dot
 
 %%
 
-sz = 100;
+sz = 180;
 lw1 = 2;
 lw2 = 6;
 lw3 = 2;
@@ -40,7 +40,7 @@ for i = 1:length(dotmodes)
     
     fig = figure(i); clf; hold on;
     set(gca, 'XScale', 'log');
-    xlabel('Duration (msec)');
+    xlbl = xlabel('Duration (msec)');
     ylabel('Motion sensitivity residual');
     yl = [max(min(data.pts.sens), 1e-1) max(data.pts.sens)];
     
@@ -112,7 +112,7 @@ for i = 1:length(dotmodes)
     set(gca, 'XTick', xticks);
     set(gca, 'XTickLabel', xticklbls);
     
-    legend('Location', 'NorthWest');
+    leg = legend('Location', 'NorthWest');
     plotFormats;
     print(fig, ['-d' fig_ext], outfile(dotmode));
 end

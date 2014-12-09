@@ -10,8 +10,8 @@ function main()
     subj = 'ALL';
     plotAll(subj, fig_ext);
     
-%     subj = 'KLB';
-%     plotAll(subj, fig_ext);
+    subj = 'krm';
+    plotPsychoByDotmode;
 
     close all;
 end
@@ -31,6 +31,8 @@ function plotAll(subj, fig_ext)
     % sat-exp curve
     plotSatExpByCoh;
     plotSatExpByDotmode;
+    
+    plotResid;
     
     % sat-exp params
 %     param = 'A';

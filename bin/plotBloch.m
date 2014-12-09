@@ -7,7 +7,7 @@ outfile = fullfile('..', 'plots', ['bloch' '-' subj '.' fig_ext]);
 
 %%
 
-sz = 100;
+sz = 180;
 lw1 = 2;
 lw2 = 6;
 lw3 = 3;
@@ -23,7 +23,7 @@ fig = figure(1); clf; hold on;
 set(gca, 'XScale', 'log');
 set(gca, 'YScale', 'log');
 % title('motion threshold vs. duration (msec)');
-xlabel('Duration (msec)');
+xlbl = xlabel('Duration (msec)');
 ylabel('Motion sensitivity (1/threshold)');
 yl = [max(min(data.pts.sens), 1e-1) max(data.pts.sens)];
 
@@ -34,10 +34,10 @@ x02d = median(data.params.x0(is2d));
 x12d = median(data.params.x1(is2d));
 x03d = median(data.params.x0(is3d));
 x13d = median(data.params.x1(is3d));
-i = 1;
+% i = 1;
 % plot(exp([x02d, x02d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
 % plot(exp([x12d, x12d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
-i = 2;
+% i = 2;
 % plot(exp([x03d, x03d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
 % plot(exp([x13d, x13d]), yl, '--', 'Color', cmap{i}, 'LineWidth', lw3, 'HandleVisibility', 'off');
 
@@ -106,8 +106,8 @@ for i = 1:length(dotmodes)
 %     text(exp(x0), 50 + 20*(i-1), ['\leftarrow  ' sprintf('%.0f', exp(x0)) ' msec'], 'FontSize', 14, 'FontWeight', 'bold');
 %     text(exp(x1), 50 + 20*(i-1), ['\leftarrow  ' sprintf('%.0f', exp(x1)) ' msec'], 'FontSize', 14, 'FontWeight', 'bold');
     
-    text(35, 12 + 6*strcmp(dotmode, '2d'), ['m1=' sprintf('%.2f', m0)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
-    text(350, 2 + 1*strcmp(dotmode, '2d'), ['m2=' sprintf('%.2f', m1)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
+    text(35, 12 + 6*strcmp(dotmode, '2d'), ['m_1 = ' sprintf('%.2f', m0)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
+    text(350, 2 + 1*strcmp(dotmode, '2d'), ['m_2 = ' sprintf('%.2f', m1)], 'Color', cmap{i}, 'FontSize', 14, 'FontWeight', 'bold');
 %     text(mean(xs2), 0.8*mean(yf2), sprintf('%.2f', m2), 'FontSize', 14, 'FontWeight', 'bold');
     
 %     errorbar_tick(h, 1e-2); % problem with log
@@ -134,6 +134,6 @@ set(gca, 'XTickLabel', xticklbls);
 set(gca, 'YTick', yticks);
 set(gca, 'YTickLabel', yticklbls);
 
-legend('Location', 'NorthWest');
+leg = legend('Location', 'NorthWest');
 plotFormats;
 print(fig, ['-d' fig_ext], outfile);

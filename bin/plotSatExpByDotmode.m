@@ -5,7 +5,7 @@ outfile = fullfile('..', 'plots', ['satExpByDotmode' '-' subj '.' fig_ext]);
 
 %%
 
-sz = 100;
+sz = 180;
 lw1 = 2;
 lw2 = 6;
 lw3 = 3;
@@ -18,7 +18,7 @@ dotmodes = {'2d', '3d'};
 fig = figure(1); clf; hold on;
 set(gca, 'XScale', 'log');
 % title('Percent correct vs. duration (msec)');
-xlabel('Duration (msec)');
+xlbl = xlabel('Duration (msec)');
 ylabel('% Correct');
 
 vrts = [];
@@ -76,7 +76,7 @@ set(gca, 'XTick', [33, 200, 1000, 6000]);
 set(gca, 'XTickLabel', {'33', '200', '1000', '6000'});
 set(gca, 'YTick', [0.5, 0.75, 1.0]);
 set(gca, 'YTickLabel', {'50', '75', '100'});
-legend('Location', 'NorthWest');
+leg = legend('Location', 'NorthWest');
 xlim([floor(min(data.pts.xs)), 6000]);
 ylim([0.45 1.0]);
 plotFormats;

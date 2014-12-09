@@ -5,7 +5,7 @@ outfile = @(dotmode) fullfile('..', 'plots', ['psychoByCoh' '-' subj '-' dotmode
 
 %%
 
-sz = 100;
+sz = 180;
 lw1 = 2;
 lw2 = 6;
 lw3 = 2;
@@ -34,7 +34,7 @@ for i = 1:length(dotmodes)
     fig = figure(i); clf; hold on;
     set(gca, 'XScale', 'log');
 %     title([dotmode ': percent correct vs. motion coherence']);
-    xlabel('% Coherence');
+    xlbl = xlabel('% Coherence');
     ylabel('% Correct');
     ln = plot([0.022, 0.7], [0.75, 0.75], ':', 'Color', [0.8 0.8 0.8], 'LineWidth', lw3, 'HandleVisibility', 'off');
     
@@ -117,7 +117,7 @@ for i = 1:length(dotmodes)
     set(gca, 'XTickLabel', xticklbls);
     set(gca, 'YTick', [0.5, 0.75, 1.0]);
     set(gca, 'YTickLabel', {'50', '75', '100'});
-    legend('Location', 'NorthWest');
+    leg = legend('Location', 'NorthWest');
     xlim([0.02, 0.7]);
     ylim([.5, 1.0]);
     plotFormats;
