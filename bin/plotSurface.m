@@ -1,12 +1,13 @@
 %%
 basename = 'pcor';
 data = loadFiles(basename, subj);
-outfile = fullfile('..', 'plots', ['surface' '-' subj '-' dotmode '.' fig_ext]);
 
 isFineGrid = false; % specifies surface shading by %-cor (t) or data dim (f)
 showDurData = false; % controls plotting of data points and lines for dur
 showCohData = true; % controls plotting of data points and lines for coh
 colorType = 'dur'; % if ~isFineGrid, data dimension for surface shading
+
+outfile = fullfile('..', 'plots', ['surface' '-' subj '-' dotmode '.' fig_ext]);
 
 %%
 

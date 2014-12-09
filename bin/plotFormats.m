@@ -1,4 +1,4 @@
-FontName = 'Helvetica Neue';
+FontName = 'Helvetica';
 FontSize = 14;
 FontWeight = 'bold';
 
