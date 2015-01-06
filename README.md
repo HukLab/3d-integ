@@ -1,5 +1,7 @@
-__bin (.m)__ - creates figures using data in fits/
+## Folder structure
 
-__fits (.csv)__ - data created by data analysis [repository](https://bitbucket.org/huklab/temporal-integration-python)
+__bin/ (.m)__ - creates figures using data in fits/
 
-__plots (.pdf)__ - final figures created by bin/
+__fits/ (.csv)__ - data created by data analysis [repository](https://bitbucket.org/huklab/temporal-integration-python)
+
+__plots/ (.pdf)__ - final figures created by bin/
