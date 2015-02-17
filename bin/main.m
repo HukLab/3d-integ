@@ -19,8 +19,10 @@ function plotAll(subj, fig_ext)
     % surface
     dotmode = '2d';
     plotSurface;
+    plotBlochByFit;
     dotmode = '3d';
     plotSurface;
+    plotBlochByFit;
 
     % pmfs
     plotPsychoByCoh;

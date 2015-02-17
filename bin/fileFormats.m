@@ -30,6 +30,10 @@ function [fmt1, fmt2] = fileFormats(basename)
     elseif strcmp('pcor', basename)
         fmt1 = '';
         fmt2 = '%f%f%f%f%s';
+    elseif strcmp('sensVsDurSlopes', basename)
+        fmt1 = '%f%s%s%f%f%f%f';
+%         fmt1 = '%f%s%s%f%f%f%f%f%f%f%f%f';
+        fmt2 = '';
     else
         error('invalid filetype.');
     end

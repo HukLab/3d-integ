@@ -31,7 +31,8 @@ for i = 1:length(dotmodes)
     xb = data.pts.x(i1);
     yb = data.pts.y(i1);
     ns = data.pts.ntrials(i1);
-    xf = linspace(min(xb), max(xb));
+%     xf = linspace(min(xb), max(xb));
+    xf = linspace(0.027, 0.55); % wee bit of extrapolation
 
     scales = data.params.scale(i2);
     locs = data.params.loc(i2);

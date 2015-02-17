@@ -48,7 +48,7 @@ if isFineGrid
     [X, Y] = meshgrid(xlin, ylin);
     Z = griddata(xs, ys, zs, X, Y, 'linear'); % < 2014a
 %     Z = f(X, Y); % >= 2014a
-    surf(gca, X, Y, Z, 'EdgeColor', 'none');
+    srf = surf(gca, X, Y, Z, 'EdgeColor', 'none');
 else
     [X, Y] = meshgrid(xlin, ylin);
     Z = f(X, Y);
@@ -71,7 +71,7 @@ else
             cm = repmat(ex, Ny, 1);
     end
     colormap(colorSchemes(dotmode, colorType, N));
-    sf = surf(gca, X, Y, Z, cm, 'EdgeColor', 'none');
+    sf = surf(gca, X, Y, Z, cm, 'EdgeColor', 'flat');
 end
 % axis tight;
 hold on;
@@ -79,10 +79,11 @@ hold on;
 colors = colorSchemes(dotmode, 'coh', Nx);
 for ii = 1:Nx
     idx = grp2idx(xs) == ii;
-    color = colors(ii,:);
+%     color = colors(ii,:);
+    color = colors(3,:);
     if showCohData
-        plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
-        plot3(xs(idx), ys(idx), zs(idx), '.', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
+        plot3(xs(idx), ys(idx), zs(idx), '-', 'Color', color, 'LineWidth', 1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
+%         plot3(xs(idx), ys(idx), zs(idx), '.', 'Color', color, 'LineWidth', lw1, 'MarkerFaceColor', 'k', 'MarkerSize', sz);
     end
 end
 colors = colorSchemes(dotmode, 'dur', Ny);

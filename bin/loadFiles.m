@@ -6,7 +6,8 @@ function data = loadFiles(basename, subj)
 % a given subject.
 %
     [fmt1, fmt2] = fileFormats(basename);
-    basedir = '/Users/jayhennig/Dropbox/HukLab/Temporal Integration/fits';
+%     basedir = '/Users/jayhennig/Dropbox/HukLab/Temporal Integration/fits';
+    basedir = '/Users/mobeets/Dropbox/Work/Huk/Temporal Integration/fits';
     if ~exist(basedir, 'dir')
         basedir = '../fits';
         disp('Using local fits instead of jayh Dropbox folder.');

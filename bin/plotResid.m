@@ -83,10 +83,10 @@ for i = 1:length(dotmodes)
     lblA = 'tri-limb fit';
     lblB = 'bi-limb fit';
     zer = plot([min(xs) max(xs)], [0 0], ':', 'Color', [0.8 0.8 0.8], 'LineWidth', lw3, 'HandleVisibility', 'off');
-    dt1 = scatter(xs, valsA, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'HandleVisibility', 'off');
-    dt2 = scatter(xs, valsB, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{2*(i-1)+1}, 'LineWidth', lw1, 'HandleVisibility', 'off');
-    ln1 = plot(xs, valsA, 'Color', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'DisplayName', lblA);
-    ln2 = plot(xs, valsB, 'Color', cmap{2*(i-1)+1}, 'LineWidth', lw1, 'DisplayName', lblB);
+    dt1 = scatter(xs, valsA, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{2*(i-1)+1}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    dt2 = scatter(xs, valsB, sz, 'MarkerEdgeColor', 'k', 'MarkerFaceColor', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'HandleVisibility', 'off');
+    ln1 = plot(xs, valsA, 'Color', cmap{2*(i-1)+1}, 'LineWidth', lw1, 'DisplayName', lblA);
+    ln2 = plot(xs, valsB, 'Color', cmap{2*(i-1)+2}, 'LineWidth', lw1, 'DisplayName', lblB);
 
     xrng = [30.0, 1025.0];
     yrng = [-17 10];

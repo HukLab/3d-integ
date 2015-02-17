@@ -1,8 +1,6 @@
 %%
 basename = 'pcorVsCohByDur_elbow';
-data = tempint_csvs(basename, subj);
-tmp = tempint_csvs('pcorVsCohByDur_thresh', subj);
-data.pts = tmp.params;
+data = loadFiles(basename, subj);
 outfile = @(dotmode) fullfile('..', 'plots', [basename '-' subj '-' dotmode '-' 'params' '.' fig_ext]);
 
 %%
