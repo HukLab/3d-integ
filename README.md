@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/18830/HukLab/3d-integ.svg)](https://zenodo.org/badge/latestdoi/18830/HukLab/3d-integ)
+
 ![stimulus-fig](https://raw.githubusercontent.com/HukLab/3d-integ/master/stimulus-fig.png)
 
 ## Overview
